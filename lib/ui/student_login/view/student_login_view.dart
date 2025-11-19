@@ -1,6 +1,10 @@
 import 'package:dental_surway/res/images.dart';
 import 'package:dental_surway/utls/common_widgets.dart';
+import 'package:dental_surway/utls/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class StudentLoginView extends StatelessWidget {
@@ -98,7 +102,7 @@ class StudentLoginView extends StatelessWidget {
               PrimaryButton(
                 title: "Request OTP for Login",
                 onTap: () {
-                  // Get.toNamed('/otp');
+                 Get.toNamed(Routes.studentOtp);
                 },
               ),
 
@@ -150,7 +154,7 @@ class StudentLoginView extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
+              SvgPicture.asset(
                 adminLogo,
                 width: 18,
                 height: 18,

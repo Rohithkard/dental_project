@@ -144,3 +144,53 @@ class PrimaryButton extends StatelessWidget {
     );
   }
 }
+
+class OtpBox extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final FocusNode? nextFocus;
+
+  const OtpBox({
+    super.key,
+    required this.controller,
+    required this.focusNode,
+    this.nextFocus,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 56,
+      height: 56,
+      child: TextField(
+        controller: controller,
+        focusNode: focusNode,
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.number,
+        maxLength: 1,
+        style: GoogleFonts.rubik(fontSize: 22, fontWeight: FontWeight.w600),
+        decoration: InputDecoration(
+          counterText: "",
+          filled: true,
+          fillColor: const Color(0xFFF7F8F9),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(
+              color: Color(0xFF0A61FF),
+              width: 1.4,
+            ),
+          ),
+        ),
+        onChanged: (value) {
+          if (value.isNotEmpty && nextFocus != null) {
+            FocusScope.of(context).requestFocus(nextFocus);
+          }
+        },
+      ),
+    );
+  }
+}
