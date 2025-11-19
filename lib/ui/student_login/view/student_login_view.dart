@@ -119,7 +119,7 @@ class StudentLoginView extends StatelessWidget {
                   const SizedBox(width: 6),
                   GestureDetector(
                     onTap: () {
-
+                      Get.toNamed(Routes.studentRegRoute);
                     },
                     child: Text(
                       "Register Now",
@@ -149,7 +149,7 @@ class StudentLoginView extends StatelessWidget {
         ),
         child: InkWell(
           onTap: () {
-
+            Get.toNamed(Routes.adminLoginRoute);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
