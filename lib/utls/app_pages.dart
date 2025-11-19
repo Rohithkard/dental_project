@@ -4,6 +4,8 @@ import 'package:dental_surway/ui/Student/overview/bind/overview_bind.dart';
 import 'package:dental_surway/ui/Student/overview/view/overview.dart';
 import 'package:dental_surway/ui/Student/profile/bind/profile_bind.dart';
 import 'package:dental_surway/ui/Student/profile/view/profile.dart';
+import 'package:dental_surway/ui/Student/student_survey/bind/student_surway_bind.dart';
+import 'package:dental_surway/ui/Student/student_survey/view/student_suway_view.dart';
 import 'package:dental_surway/ui/admin_dashboard/bind/admin_dashboard_controller.dart';
 import 'package:dental_surway/ui/admin_dashboard/view/admin_view.dart';
 import 'package:dental_surway/ui/admin_login/bind/admin_login_bind.dart';
@@ -94,6 +96,11 @@ abstract class AppPages {
       name: Routes.studentProfile,
       page: () => ProfileStudentView(),
       binding: StudentProfileBinding(),
+    ),
+    GetPage(
+      name: Routes.studentSurwayLine,
+      page: () => StudentSurveyView(),
+      binding: StudentSurwayBinding(),
     ),
   ];
 }

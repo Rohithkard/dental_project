@@ -15,5 +15,6 @@ abstract class Routes {
   static const studentNavPage = '/studentNavPage';
   static const studentHomePage = '/studentHomePage';
   static const studentProfile = '/studentHomePage';
+  static const studentSurwayLine = '/studentSurwayLine';
 
 }
