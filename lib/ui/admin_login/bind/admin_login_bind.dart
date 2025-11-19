@@ -1,3 +1,4 @@
+import 'package:dental_surway/utls/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,9 +27,7 @@ class AdminLoginController extends GetxController {
     }
 
     // TODO: Call API
-    // Get.offAllNamed('/admin-dashboard');
-
-    Get.snackbar("Success", "Logged in as Admin!");
+    Get.offAllNamed(Routes.mainAdminRoute);
   }
 
 }

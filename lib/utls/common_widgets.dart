@@ -194,3 +194,200 @@ class OtpBox extends StatelessWidget {
     );
   }
 }
+
+class MetricCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final Widget icon;
+  final Color iconBg;
+
+  const MetricCard({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.iconBg,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.rubik(
+                    color: Colors.black87,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  value,
+                  style: GoogleFonts.rubik(
+                    color: Colors.black,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: iconBg,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: icon,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StudentScoreTile extends StatelessWidget {
+  final String name;
+  final String status;
+  final int score;
+
+  const StudentScoreTile({
+    super.key,
+    required this.name,
+    required this.status,
+    required this.score,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Top Row
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  name,
+                  style: GoogleFonts.rubik(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
+              // Status badge
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  status,
+                  style: GoogleFonts.rubik(
+                    color: Colors.red.shade700,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 12),
+
+          Row(
+            children: [
+              Icon(Icons.remove_red_eye, size: 20, color: Colors.grey[700]),
+              const SizedBox(width: 16),
+              Icon(Icons.bar_chart, size: 20, color: Colors.grey[700]),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class AdminBottomNav extends StatelessWidget {
+  final int currentIndex;
+  final Function(int index) onTap;
+
+  const AdminBottomNav({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(18),
+          topRight: Radius.circular(18),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, -2),
+          )
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          navItem(icon: Icons.grid_view_rounded, label: "Overview", index: 0),
+          navItem(icon: Icons.help_center, label: "Questions", index: 1),
+          navItem(icon: Icons.person_outline, label: "Profile", index: 2),
+        ],
+      ),
+    );
+  }
+
+  Widget navItem({required IconData icon, required String label, required int index}) {
+    final isActive = index == currentIndex;
+
+    return InkWell(
+      onTap: () => onTap(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 26,
+            color: isActive ? const Color(0xFF0A61FF) : Colors.grey,
+          ),
+          Text(
+            label,
+            style: GoogleFonts.rubik(
+              fontSize: 12,
+              color: isActive ? const Color(0xFF0A61FF) : Colors.grey,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
