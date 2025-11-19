@@ -1,3 +1,4 @@
+import 'package:dental_surway/model/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,29 +10,19 @@ class SelectLanguageBinding implements Bindings{
 
 }
 class SelectLangController extends GetxController {
-  final selectedLanguage = Rxn<String>();
+  RxInt selectedIndex = (-1).obs;
 
-  void selectLanguage(String language) {
-    selectedLanguage.value = language;
+  final RxList<LanguageModel> languages = <LanguageModel>[
+    LanguageModel(name: "English", image: "assets/images/english.png"),
+    LanguageModel(name: "Español", image: "assets/images/spanish.png"),
+    LanguageModel(name: "Français", image: "assets/images/french.png"),
+    LanguageModel(name: "Deutsch", image: "assets/images/german.png"),
+    LanguageModel(name: "中文", image: "assets/images/chinese.png"),
+  ].obs;
+
+  void selectLanguage(int index) {
+    selectedIndex.value = index;
   }
 
-  void continueToNext() {
-    if (selectedLanguage.value != null) {
-      Get.snackbar(
-        'Selected',
-        'Language: ${selectedLanguage.value}',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      // Navigate to next page
-      // Get.to(() => NextPage());
-    } else {
-      Get.snackbar(
-        'Error',
-        'Please select a language',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red,
-      );
-    }
-  }
 }
 
