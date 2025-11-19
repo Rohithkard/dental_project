@@ -1,3 +1,4 @@
+import 'package:dental_surway/ui/student_login/view/student_login_view.dart';
 import 'package:dental_surway/utls/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -46,25 +47,30 @@ class OverviewView extends StatelessWidget {
                     ),
                   ),
 
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.exit_to_app,
-                            size: 20, color: Colors.blue.shade700),
-                        const SizedBox(width: 6),
-                        Text(
-                          "Logout",
-                          style: GoogleFonts.rubik(
-                              color: Colors.blue.shade700,
-                              fontWeight: FontWeight.w500),
-                        )
-                      ],
+                  InkWell(
+                    onTap: (){
+                      Get.to(() => StudentLoginView());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.exit_to_app,
+                              size: 20, color: Colors.blue.shade700),
+                          const SizedBox(width: 6),
+                          Text(
+                            "Logout",
+                            style: GoogleFonts.rubik(
+                                color: Colors.blue.shade700,
+                                fontWeight: FontWeight.w500),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],
