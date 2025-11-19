@@ -4,4 +4,5 @@ abstract class Routes {
   static const studentOtp = '/studentOtp';
   static const adminLoginRoute = '/adminLoginRoute';
   static const studentRegRoute = '/studentRegRoute';
+  static const selLangRoute = '/selLangRoute';
 }

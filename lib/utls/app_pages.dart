@@ -1,5 +1,7 @@
 import 'package:dental_surway/ui/admin_login/bind/admin_login_bind.dart';
 import 'package:dental_surway/ui/admin_login/view/admin_login_view.dart';
+import 'package:dental_surway/ui/select_lang/bind/sel_lang_bind.dart';
+import 'package:dental_surway/ui/select_lang/view/sel_lang_view.dart';
 import 'package:dental_surway/ui/splash/bind/splash_bind.dart';
 import 'package:dental_surway/ui/splash/view/splash_view.dart';
 import 'package:dental_surway/ui/student_login/bind/student_login_bind.dart';
@@ -37,6 +39,11 @@ abstract class AppPages {
       name: Routes.studentRegRoute,
       page: () => StudentRegView(),
       binding: StudentRegBind(),
+    ),
+    GetPage(
+        name: Routes.selLangRoute,
+        page: () => SelectLanguageView(),
+      binding: SelectLanguageBinding(),
     ),
   ];
 }
