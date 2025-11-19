@@ -1,4 +1,5 @@
 import 'package:dental_surway/ui/admin_dashboard/bind/admin_dashboard_controller.dart';
+import 'package:dental_surway/ui/admin_login/view/admin_login_view.dart';
 import 'package:dental_surway/utls/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,26 +33,31 @@ class AdminDashboardView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.exit_to_app,
-                            size: 20, color: Colors.blue.shade700),
-                        const SizedBox(width: 6),
-                        Text(
-                          "Logout",
-                          style: GoogleFonts.rubik(
-                            color: Colors.blue.shade700,
-                            fontWeight: FontWeight.w500,
+                  InkWell(
+                    onTap: (){
+                      Get.to(() => AdminLoginView());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.exit_to_app,
+                              size: 20, color: Colors.blue.shade700),
+                          const SizedBox(width: 6),
+                          Text(
+                            "Logout",
+                            style: GoogleFonts.rubik(
+                              color: Colors.blue.shade700,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],

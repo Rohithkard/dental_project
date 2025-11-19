@@ -56,6 +56,9 @@ class QuestionsView extends StatelessWidget {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          width: 5,
+                        ),
                         ElevatedButton.icon(
                           icon: const Icon(Icons.add, size: 18, color: Colors.white),
                           label:  Text("Add Question",style: TextStyle(fontSize: 14.0,color: Colors.white,fontWeight: FontWeight.bold),),
@@ -75,8 +78,8 @@ class QuestionsView extends StatelessWidget {
                     const SizedBox(height: 10),
 
                     Text(
-                      "View and organize survey question groups",
-                      style: GoogleFonts.rubik(color: Colors.grey),
+                      "View and organize survey \nquestion groups",
+                      style: GoogleFonts.rubik(color: Colors.grey, fontSize: 16),
                     ),
 
                     const SizedBox(height: 14),
