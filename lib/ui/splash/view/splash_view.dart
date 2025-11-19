@@ -83,7 +83,7 @@ class SplashView extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Get.toNamed('/login'); // your route
-                  Get.toNamed(Routes.studentLogin);
+                  Get.toNamed(Routes.selLangRoute);
                 },
                 child: Text(
                   "Continue",
