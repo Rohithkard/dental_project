@@ -1,4 +1,7 @@
+import 'package:dental_surway/res/images.dart';
+import 'package:dental_surway/utls/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,17 +20,17 @@ class SplashView extends StatelessWidget {
           // -------------------- TOP BLUE ARC --------------------
           Container(
             width: double.infinity,
-            height: size.height * 0.45,
+            height: size.height * 0.65,
             decoration: const BoxDecoration(
               color: Color(0xff0A61FF),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(500),
-                bottomRight: Radius.circular(500),
+                bottomLeft: Radius.circular(400),
+                bottomRight: Radius.circular(400),
               ),
             ),
             child: Center(
               child: Image.asset(
-                "assets/images/tooth.png", // your icon
+                logo, // your icon
                 width: 160,
                 height: 160,
                 color: Colors.white,
@@ -80,6 +83,7 @@ class SplashView extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Get.toNamed('/login'); // your route
+                  Get.toNamed(Routes.studentLogin);
                 },
                 child: Text(
                   "Continue",

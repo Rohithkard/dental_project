@@ -9,6 +9,4 @@ class SplashBinding implements Bindings {
 
 class SplashController extends GetxController {
   static SplashController get to => Get.find();
-
-
 }

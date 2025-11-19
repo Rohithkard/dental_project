@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/dental_surway.iml" filepath="$PROJECT_DIR$/dental_surway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/dental_surway_android.iml" filepath="$PROJECT_DIR$/android/dental_surway_android.iml" />
     </modules>
   </component>
 </project>
