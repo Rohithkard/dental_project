@@ -9,4 +9,11 @@ abstract class Routes {
   static const questionRoute = '/questionRoute';
   static const mainAdminRoute = '/mainAdminRoute';
   static const adminProfileRoute = '/adminProfileRoute';
+
+  //Student
+
+  static const studentNavPage = '/studentNavPage';
+  static const studentHomePage = '/studentHomePage';
+  static const studentProfile = '/studentHomePage';
+
 }

@@ -14,12 +14,6 @@ class QuestionsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFE9F0FF),
-
-      bottomNavigationBar: AdminBottomNav(
-        currentIndex: 1,
-        onTap: (i) {},
-      ),
-
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -64,7 +58,7 @@ class QuestionsView extends StatelessWidget {
                         ),
                         ElevatedButton.icon(
                           icon: const Icon(Icons.add, size: 18, color: Colors.white),
-                          label: const Text("Add Question"),
+                          label:  Text("Add Question",style: TextStyle(fontSize: 14.0,color: Colors.white,fontWeight: FontWeight.bold),),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF0A61FF),
                             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),

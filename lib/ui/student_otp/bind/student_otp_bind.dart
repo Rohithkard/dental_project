@@ -1,3 +1,4 @@
+import 'package:dental_surway/utls/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,6 +35,6 @@ class StudentOtpController extends GetxController {
     }
 
     // Navigate
-    // Get.toNamed('/dashboard');
+     Get.toNamed(Routes.studentNavPage);
   }
 }

@@ -1,3 +1,9 @@
+import 'package:dental_surway/ui/Student/nav_page/bind/student_nav_controller.dart';
+import 'package:dental_surway/ui/Student/nav_page/view/view.dart';
+import 'package:dental_surway/ui/Student/overview/bind/overview_bind.dart';
+import 'package:dental_surway/ui/Student/overview/view/overview.dart';
+import 'package:dental_surway/ui/Student/profile/bind/profile_bind.dart';
+import 'package:dental_surway/ui/Student/profile/view/profile.dart';
 import 'package:dental_surway/ui/admin_dashboard/bind/admin_dashboard_controller.dart';
 import 'package:dental_surway/ui/admin_dashboard/view/admin_view.dart';
 import 'package:dental_surway/ui/admin_login/bind/admin_login_bind.dart';
@@ -72,6 +78,22 @@ abstract class AppPages {
       name: Routes.adminProfileRoute,
       page: () => AdminProfileView(),
       binding: AdminProfileBind(),
+    ),
+
+    GetPage(
+      name: Routes.studentNavPage,
+      page: () => StudentHomeView(),
+      binding: StudentNavBinding(),
+    ),
+    GetPage(
+      name: Routes.studentHomePage,
+      page: () => OverviewView(),
+      binding: StudentOverViewBinding(),
+    ),
+    GetPage(
+      name: Routes.studentProfile,
+      page: () => ProfileStudentView(),
+      binding: StudentProfileBinding(),
     ),
   ];
 }

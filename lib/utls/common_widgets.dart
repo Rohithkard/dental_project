@@ -391,3 +391,68 @@ class AdminBottomNav extends StatelessWidget {
     );
   }
 }
+
+
+class StudentBottomNav extends StatelessWidget {
+  final int currentIndex;
+  final Function(int index) onTap;
+
+  const StudentBottomNav({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(18),
+          topRight: Radius.circular(18),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6,
+            offset: Offset(0, -2),
+          )
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          navItem(Icons.grid_view_rounded, "Overview", 0),
+          navItem(Icons.person_outline, "Profile", 1),
+        ],
+      ),
+    );
+  }
+
+  Widget navItem(IconData icon, String label, int index) {
+    final bool active = currentIndex == index;
+
+    return InkWell(
+      onTap: () => onTap(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 26,
+            color: active ? const Color(0xFF0A61FF) : Colors.grey,
+          ),
+          Text(
+            label,
+            style: GoogleFonts.rubik(
+              fontSize: 12,
+              color: active ? const Color(0xFF0A61FF) : Colors.grey,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
