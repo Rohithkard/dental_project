@@ -90,7 +90,7 @@ class Api extends GetConnect {
     required var username,
     required var password,
   }) {
-    print('username : $username password : $password');
+
     return post(
       '/admin/login',
       FormData(
@@ -101,6 +101,7 @@ class Api extends GetConnect {
         },
       ),
     ).then((value) {
+      print('username : $username password : $password body: ${value.body}');
       return AdminLoginModel.fromJson(value.body ?? err);
     });
   }

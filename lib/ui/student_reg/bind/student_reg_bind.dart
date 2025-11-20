@@ -59,11 +59,12 @@ class StudentRegController extends GetxController {
     );
     EasyLoading.dismiss();
     if (signUpModelClass?.success ?? true) {
-      Get.offAllNamed(
+      Get.offNamed(
         Routes.studentOtp,
         arguments: [
           signUpModelClass?.data?.otpKey ?? '',
           signUpModelClass?.data?.otp ?? '',
+          phone.text,
         ],
       );
     } else {

@@ -30,11 +30,12 @@ class StudentLoginController extends GetxController {
       if (!(signUpModelClass?.success ?? false)) {
         Get.snackbar("Error", signUpModelClass?.message ?? '');
       }else{
-        Get.offAllNamed(
+        Get.toNamed(
           Routes.studentOtp,
           arguments: [
             signUpModelClass?.data?.otpKey ?? '',
             signUpModelClass?.data?.otp ?? '',
+            username.text
           ],
         );
       }
