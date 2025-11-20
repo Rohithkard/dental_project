@@ -1,3 +1,4 @@
+import 'package:dental_surway/model/otp_verified_model.dart';
 import 'package:dental_surway/utls/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,9 @@ class StudentOtpController extends GetxController {
   final f3 = FocusNode();
   final f4 = FocusNode();
 
+  VerifiedModelClass?verifiedModelClass;
+
+
   String getOtp() {
     return otp1.text + otp2.text + otp3.text + otp4.text;
   }
@@ -36,5 +40,18 @@ class StudentOtpController extends GetxController {
 
     // Navigate
      Get.toNamed(Routes.studentNavPage);
+  }
+
+  @override
+  void onInit() {
+      getArguments();
+    super.onInit();
+  }
+
+  void getArguments() {
+    var data=Get.arguments;
+    if(data!=null){
+
+    }
   }
 }

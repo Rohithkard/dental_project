@@ -148,6 +148,12 @@ class StudentRegView extends StatelessWidget {
           label: "Address",
           controller: controller.address,
         ),
+        const SizedBox(height: 20),
+
+        AppInputField(
+          label: "Email",
+          controller: controller.email,
+        ),
       ],
     );
   }

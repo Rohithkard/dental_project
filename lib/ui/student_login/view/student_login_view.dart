@@ -102,7 +102,8 @@ class StudentLoginView extends StatelessWidget {
                   PrimaryButton(
                     title: "Request OTP for Login",
                     onTap: () {
-                     Get.toNamed(Routes.studentOtp);
+                      logic.checkValidUser();
+                     // Get.toNamed(Routes.studentOtp);
                     },
                   ),
 

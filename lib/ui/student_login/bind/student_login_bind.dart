@@ -1,4 +1,6 @@
 import 'package:dental_surway/model/sign_up_model_class.dart';
+import 'package:dental_surway/utls/api_controller.dart';
+import 'package:dental_surway/utls/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -13,20 +15,31 @@ class StudentLoginBinding implements Bindings {
 class StudentLoginController extends GetxController {
   static StudentLoginController get to => Get.find();
 
-  TextEditingController username=TextEditingController();
-
+  TextEditingController username = TextEditingController();
 
   SignUpModelClass? signUpModelClass;
 
-  void checkValidUser(){
-    try{
-    EasyLoading.show();
-
-    EasyLoading.dismiss();
-    }catch(ex){
+  void checkValidUser() async {
+    try {
+      if ((username?.text ?? '').isEmpty) {
+        return;
+      }
+      EasyLoading.show();
+      signUpModelClass = await Api.to.userStudentLogin(phone: username.text);
+      EasyLoading.dismiss();
+      if (!(signUpModelClass?.success ?? false)) {
+        Get.snackbar("Error", signUpModelClass?.message ?? '');
+      }else{
+        Get.offAllNamed(
+          Routes.studentOtp,
+          arguments: [
+            signUpModelClass?.data?.otpKey ?? '',
+            signUpModelClass?.data?.otp ?? '',
+          ],
+        );
+      }
+    } catch (ex) {
       EasyLoading.showToast('Error : $ex');
     }
   }
-
-
 }

@@ -26,6 +26,7 @@ class StudentRegController extends GetxController {
   final gender = TextEditingController();
   final phone = TextEditingController();
   final address = TextEditingController();
+  final email = TextEditingController();
 
   void nextStep() {
     if (step.value == 1) {
@@ -49,7 +50,7 @@ class StudentRegController extends GetxController {
     EasyLoading.show();
     signUpModelClass = await Api.to.signupStudent(
       mob: phone.text,
-      email: 'null',
+      email: email.text,
       age: age.text,
       gender: gender.text,
       full_name: fullName.text,
