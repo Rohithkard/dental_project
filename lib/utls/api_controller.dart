@@ -31,6 +31,7 @@ class Api extends GetConnect {
     required var age,
     required var gender,
     required var address,
+    required var code,
   }) {
     return post(
       '/user/sign_up',
@@ -42,6 +43,7 @@ class Api extends GetConnect {
           'age': age,
           'gender': gender,
           'address': address,
+          'code': code,
         },
       ),
     ).then((value) {

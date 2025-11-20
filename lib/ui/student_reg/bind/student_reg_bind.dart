@@ -1,5 +1,7 @@
 import 'package:dental_surway/model/sign_up_model_class.dart';
 import 'package:dental_surway/utls/api_controller.dart';
+import 'package:dental_surway/utls/routes.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +46,7 @@ class StudentRegController extends GetxController {
       Get.snackbar("Missing Information", "Please fill all fields");
       return;
     }
-
+    EasyLoading.show();
     signUpModelClass = await Api.to.signupStudent(
       mob: phone.text,
       email: 'null',
@@ -52,14 +54,19 @@ class StudentRegController extends GetxController {
       gender: gender.text,
       full_name: fullName.text,
       address: address.text,
+      code: '+91',
     );
-
-    if(signUpModelClass?.success??true){
-
-    }else{
-      Get.snackbar("Success", "Registration Completed!");
-
+    EasyLoading.dismiss();
+    if (signUpModelClass?.success ?? true) {
+      Get.offAllNamed(
+        Routes.studentOtp,
+        arguments: [
+          signUpModelClass?.data?.otpKey ?? '',
+          signUpModelClass?.data?.otp ?? '',
+        ],
+      );
+    } else {
+      Get.snackbar("Error", signUpModelClass?.message ?? '');
     }
-
   }
 }
