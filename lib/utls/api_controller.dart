@@ -1,3 +1,4 @@
+import 'package:dental_surway/model/otp_verified_model.dart';
 import 'package:dental_surway/model/sign_up_model_class.dart';
 import 'package:dental_surway/utls/com_binding.dart';
 import 'package:dental_surway/utls/const.dart';
@@ -23,12 +24,13 @@ class Api extends GetConnect {
     });
   }
 
-  Future<SignUpModelClass> scanQr({
+  Future<SignUpModelClass> signupStudent({
     required var mob,
     required var full_name,
     required var email,
-    required var code,
+    required var age,
     required var gender,
+    required var address,
   }) {
     return post(
       '/user/sign_up',
@@ -37,12 +39,49 @@ class Api extends GetConnect {
           'mob': mob,
           'full_name': full_name,
           'email': email,
-          'code': code,
+          'age': age,
           'gender': gender,
+          'address': address,
         },
       ),
     ).then((value) {
       return SignUpModelClass.fromJson(value.body ?? err);
     });
   }
+
+  Future<SignUpModelClass> userStudentLogin({
+    required var phone
+  }) {
+    return post(
+      '/user/login',
+      FormData(
+        {
+          'phone': phone,
+
+        },
+      ),
+    ).then((value) {
+      return SignUpModelClass.fromJson(value.body ?? err);
+    });
+  }
+
+  Future<VerifiedModelClass> userVerifyLogin({
+    required var otpKey,
+    required var otp,
+  }) {
+    return post(
+      '/user/verify_otp',
+      FormData(
+        {
+          'otpKey': otpKey,
+          'otp': otp,
+
+        },
+      ),
+    ).then((value) {
+      return VerifiedModelClass.fromJson(value.body ?? err);
+    });
+  }
+
 }
+
