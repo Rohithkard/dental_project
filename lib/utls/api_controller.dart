@@ -1,3 +1,4 @@
+import 'package:dental_surway/model/admin_login_model_class.dart';
 import 'package:dental_surway/model/otp_verified_model.dart';
 import 'package:dental_surway/model/sign_up_model_class.dart';
 import 'package:dental_surway/utls/com_binding.dart';
@@ -82,6 +83,25 @@ class Api extends GetConnect {
       ),
     ).then((value) {
       return VerifiedModelClass.fromJson(value.body ?? err);
+    });
+  }
+
+  Future<AdminLoginModel> adminLogin({
+    required var username,
+    required var password,
+  }) {
+    print('username : $username password : $password');
+    return post(
+      '/admin/login',
+      FormData(
+        {
+          'username': username,
+          'password': password,
+
+        },
+      ),
+    ).then((value) {
+      return AdminLoginModel.fromJson(value.body ?? err);
     });
   }
 
