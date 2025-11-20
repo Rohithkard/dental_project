@@ -1,5 +1,6 @@
 import 'package:dental_surway/model/admin_login_model_class.dart';
 import 'package:dental_surway/model/otp_verified_model.dart';
+import 'package:dental_surway/model/profile_model_class.dart';
 import 'package:dental_surway/model/sign_up_model_class.dart';
 import 'package:dental_surway/utls/com_binding.dart';
 import 'package:dental_surway/utls/const.dart';
@@ -103,6 +104,15 @@ class Api extends GetConnect {
     ).then((value) {
       print('username : $username password : $password body: ${value.body}');
       return AdminLoginModel.fromJson(value.body ?? err);
+    });
+  }
+
+  Future<ProfileModelClass> getProfile() {
+    return get(
+      '/user/profile'
+    ).then((value) {
+
+      return ProfileModelClass.fromJson(value.body ?? err);
     });
   }
 
