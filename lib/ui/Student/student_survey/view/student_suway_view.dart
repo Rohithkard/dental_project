@@ -14,8 +14,15 @@ class StudentSurveyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final int sectionIndex = controller.currentSection.value;
-      final section = controller.surveySections[sectionIndex];
+      if (controller.quiz.value == null) {
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }
+
+      final quiz = controller.quiz.value!;
+      final int sectionIndex = controller.currentIndex.value;
+      final question = quiz.questions[sectionIndex];
 
       return Scaffold(
         backgroundColor: const Color(0xFFE9F0FF),
@@ -51,9 +58,9 @@ class StudentSurveyView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      // Title
+                      // Title = quiz name
                       Text(
-                        section["title"],
+                        quiz.quizName,
                         style: GoogleFonts.rubik(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
@@ -62,7 +69,7 @@ class StudentSurveyView extends StatelessWidget {
                       const SizedBox(height: 6),
 
                       Text(
-                        "Section ${sectionIndex + 1} of ${controller.surveySections.length}",
+                        "Question ${sectionIndex + 1} of ${quiz.questions.length}",
                         style: GoogleFonts.rubik(
                             fontSize: 14, color: Colors.grey.shade600),
                       ),
@@ -74,8 +81,7 @@ class StudentSurveyView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         child: LinearProgressIndicator(
                           minHeight: 6,
-                          value: (sectionIndex + 1) /
-                              controller.surveySections.length,
+                          value: (sectionIndex + 1) / quiz.questions.length,
                           backgroundColor: Colors.grey.shade300,
                           valueColor: const AlwaysStoppedAnimation<Color>(
                               Color(0xFF0A61FF)),
@@ -84,63 +90,37 @@ class StudentSurveyView extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      // Questions
-                      ...section["questions"].asMap().entries.map((entry) {
-                        int qIndex = entry.key;
-                        var q = entry.value;
+                      // Single Question (mapped)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 22),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              question.question,
+                              style: GoogleFonts.rubik(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 12),
 
-                        int globalIndex = _globalIndex(sectionIndex, qIndex);
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 22),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                q["q"],
-                                style: GoogleFonts.rubik(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              const SizedBox(height: 12),
-
-                              Row(
-                                children: [
-                                  AnswerButton(
-                                    label: "Yes",
-                                    selected:
-                                    controller.answers[globalIndex]["value"] ==
-                                        "yes",
-                                    onTap: () => controller
-                                        .selectAnswer(globalIndex, "yes"),
-                                  ),
-                                  AnswerButton(
-                                    label: "No",
-                                    selected:
-                                    controller.answers[globalIndex]["value"] ==
-                                        "no",
-                                    onTap: () => controller
-                                        .selectAnswer(globalIndex, "no"),
-                                  ),
-                                ],
-                              ),
-
-                              if (q["type"] == "yesno-extra") ...[
-                                const SizedBox(height: 12),
+                            Row(
+                              children: [
                                 AnswerButton(
-                                  label: "Former user",
-                                  selected:
-                                  controller.answers[globalIndex]["value"] ==
-                                      "former",
-                                  onTap: () => controller
-                                      .selectAnswer(globalIndex, "former"),
+                                  label: "Yes",
+                                  selected: controller.answers[sectionIndex] == "yes",
+                                  onTap: () => controller.selectAnswer(sectionIndex, "yes"),
                                 ),
-                              ]
-                            ],
-                          ),
-                        );
-                      }),
-
+                                AnswerButton(
+                                  label: "No",
+                                  selected: controller.answers[sectionIndex] == "no",
+                                  onTap: () => controller.selectAnswer(sectionIndex, "no"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
 
                       const SizedBox(height: 10),
 
@@ -157,7 +137,7 @@ class StudentSurveyView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                onPressed: controller.prevSection,
+                                onPressed: controller.prevQuestion,
                                 child: Text(
                                   "◀ Previous",
                                   style: GoogleFonts.rubik(
@@ -181,9 +161,19 @@ class StudentSurveyView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
-                              onPressed: controller.nextSection,
+
+                              onPressed: () {
+                                if (sectionIndex == quiz.questions.length - 1) {
+                                  controller.submitFinalQuiz();
+                                } else {
+                                  controller.nextQuestion();
+                                }
+                              },
+
                               child: Text(
-                                "Next ▶",
+                                sectionIndex == quiz.questions.length - 1
+                                    ? "Submit ▶"
+                                    : "Next ▶",
                                 style: GoogleFonts.rubik(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -200,7 +190,7 @@ class StudentSurveyView extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // Pagination Dots
-                _indicatorDots(controller),
+                _indicatorDots(controller, quiz.questions.length),
               ],
             ),
           ),
@@ -209,33 +199,24 @@ class StudentSurveyView extends StatelessWidget {
     });
   }
 
-  // Dots Indicator
-  Widget _indicatorDots(StudentSurwayController c) {
+  // Updated dots indicator
+  Widget _indicatorDots(StudentSurwayController c, int total) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
-        c.surveySections.length,
+        total,
             (index) => Container(
           width: 28,
           height: 6,
           margin: const EdgeInsets.symmetric(horizontal: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
-            color: c.currentSection.value == index
+            color: c.currentIndex.value == index
                 ? const Color(0xFF0A61FF)
                 : Colors.grey.shade300,
           ),
         ),
       ),
     );
-  }
-
-  // Convert section+question index to global answer index
-  int _globalIndex(int sectionIndex, int qIndex) {
-    int count = 0;
-    for (int i = 0; i < sectionIndex; i++) {
-      count += int.parse((controller.surveySections[i]["questions"].length).toString());
-    }
-    return count + qIndex;
   }
 }

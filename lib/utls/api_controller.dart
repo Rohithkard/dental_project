@@ -1,6 +1,9 @@
 import 'package:dental_surway/model/admin_login_model_class.dart';
+import 'package:dental_surway/model/base_model_class.dart';
+import 'package:dental_surway/model/dashboard_summary.dart';
 import 'package:dental_surway/model/otp_verified_model.dart';
 import 'package:dental_surway/model/profile_model_class.dart';
+import 'package:dental_surway/model/quiz_model.dart';
 import 'package:dental_surway/model/sign_up_model_class.dart';
 import 'package:dental_surway/utls/com_binding.dart';
 import 'package:dental_surway/utls/const.dart';
@@ -113,6 +116,36 @@ class Api extends GetConnect {
     ).then((value) {
 
       return ProfileModelClass.fromJson(value.body ?? err);
+    });
+  }
+  Future<DashboardSummary> getDashboardOverView({required var no}) {
+    return get(
+      '/user/dashboard/summary/$no'
+    ).then((value) {
+
+      return DashboardSummary.fromJson(value.body ?? err);
+    });
+  }
+
+  Future<QuizModel> getQuizQuestions(int quizId) {
+    return get("/user/quiz/$quizId/questions").then((value) {
+      return QuizModel.fromJson(value.body["data"]);
+    });
+  }
+
+  Future<BaseClassModel> submitQuiz({
+    required int quizId,
+    required int studentId,
+    required List<Map<String, dynamic>> answers,
+  }) {
+    return post(
+      "/user/quiz/$quizId/submit",
+      {
+        "student_id": studentId,
+        "answers": answers,
+      },
+    ).then((value) {
+      return BaseClassModel.fromJson(value.body["data"]);
     });
   }
 

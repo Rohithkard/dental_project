@@ -16,7 +16,7 @@ class ComBinding implements Bindings {
 class AppSession extends GetxController {
   static AppSession get to => Get.find();
 
-  var session = GetStorage('foodZap');
+  var session = GetStorage('dental');
 
   Future<void> logout() async {
     session.erase();

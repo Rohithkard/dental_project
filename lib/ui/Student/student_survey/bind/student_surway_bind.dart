@@ -1,3 +1,7 @@
+import 'package:dental_surway/model/base_model_class.dart';
+import 'package:dental_surway/model/quiz_model.dart';
+import 'package:dental_surway/utls/api_controller.dart';
+import 'package:dental_surway/utls/routes.dart';
 import 'package:get/get.dart';
 
 class StudentSurwayBinding implements Bindings {
@@ -7,70 +11,76 @@ class StudentSurwayBinding implements Bindings {
   }
 }
 
-
 class StudentSurwayController extends GetxController {
-  RxInt currentSection = 0.obs;
+  Rx<QuizModel?> quiz = Rx<QuizModel?>(null);
 
-  final List<Map<String, dynamic>> surveySections = [
-    {
-      "title": "Oral Hygiene Practices",
-      "questions": [
-        {"q": "Do you brush your teeth twice daily?", "type": "yesno"},
-        {"q": "Do you use dental floss regularly?", "type": "yesno"},
-        {"q": "Do you use mouthwash as\npart of your routine?", "type": "yesno"},
-      ]
-    },
-    {
-      "title": "Oral Hygiene Practices",
-      "questions": [
-        {"q": "Any history of tobacco use?", "type": "yesno-extra"}
-      ]
-    },
-    {
-      "title": "Dental Visits",
-      "questions": [
-        {"q": "Have you visited a dentist in the last 6 months?", "type": "yesno"},
-      ]
-    },
-    {
-      "title": "Diet & Lifestyle",
-      "questions": [
-        {"q": "Do you consume sugary drinks daily?", "type": "yesno"},
-      ]
-    },
-  ];
+  RxList<String?> answers = <String?>[].obs;
+  RxInt currentIndex = 0.obs;
 
-  RxList<Map<String, dynamic>> answers = <Map<String, dynamic>>[].obs;
+  Future<void> loadQuiz(int quizId) async {
+    try {
+      final data = await Api.to.getQuizQuestions(quizId);
+      quiz.value = data;
 
-  @override
-  void onInit() {
-    _initAnswers();
-    super.onInit();
-  }
-
-  void _initAnswers() {
-    answers.clear();
-    for (var section in surveySections) {
-      for (var q in section["questions"]) {
-        answers.add({"value": null});
-      }
+      // initialize answers
+      answers.value = List<String?>.filled(data.questions.length, null);
+    } catch (e) {
+      print("Error loading quiz: $e");
     }
   }
 
-  void selectAnswer(int index, String value) {
-    answers[index]["value"] = value;
+  void selectAnswer(int qIndex, String value) {
+    answers[qIndex] = value;
     answers.refresh();
   }
 
-  void nextSection() {
-    if (currentSection.value < surveySections.length - 1) {
-      currentSection.value++;
+  @override
+  void onInit() {
+    loadQuiz(1);
+    super.onInit();
+  }
+
+  void nextQuestion() {
+    if (currentIndex.value < (quiz.value!.questions.length - 1)) {
+      currentIndex.value++;
     }
   }
 
-  void prevSection() {
-    if (currentSection.value > 0) {
-      currentSection.value--;
+  void prevQuestion() {
+    if (currentIndex.value > 0) {
+      currentIndex.value--;
+    }
+  }
+
+  BaseClassModel? baseClassModel;
+
+  Future<void> submitFinalQuiz() async {
+    if (quiz.value == null) return;
+
+    final q = quiz.value!;
+    final List<Map<String, dynamic>> answerPayload = [];
+
+    for (int i = 0; i < q.questions.length; i++) {
+      answerPayload.add({
+        "question_id": q.questions[i].id,
+        "answer": answers[i] ?? "",
+      });
+    }
+
+    try {
+      baseClassModel = await Api.to.submitQuiz(
+        quizId: q.id,
+        studentId: 1,
+        answers: answerPayload,
+      );
+      if (baseClassModel?.success ?? true) {
+        Get.snackbar("Success", baseClassModel?.message ?? '');
+        Get.offNamed(Routes.studentNavPage);
+      } else {
+        Get.snackbar("Error", baseClassModel?.message ?? '');
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Failed to submit quiz");
     }
   }
 }
