@@ -106,116 +106,74 @@ class QuestionsView extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Groups + questions list
-              Obx(() {
-                return Column(
-                  children: (controller.quizModelClassAdmin?.data?.quiz?.cFirst?.questions??[]).map((group) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 18),
-                      padding: const EdgeInsets.all(18),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
 
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Group header
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  group?.questionText??'',
-                                  style: GoogleFonts.rubik(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+              GetBuilder<QuestionsController>(
+                builder: (c) {
+                  final questions = c.quizModelClassAdmin?.data?.quiz?[0]?.questions ?? [];
+                  print('Object : ${questions}');
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: questions.length,
+                    itemBuilder: (_, index) {
+                      final q = questions[index];
+
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 18),
+                        padding: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                q?.questionText ?? '',
+                                style: GoogleFonts.rubik(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.black,
-                                ),
-                                child: Text(
-                                  "${controller?.quizModelClassAdmin?.data?.total??0} questions",
-                                  style: GoogleFonts.rubik(
-                                    color: Colors.white,
-                                    fontSize: 13,
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-
-                          const SizedBox(height: 18),
-
-                          // Questions
-                          ...(controller.quizModelClassAdmin?.data?.quiz?.cFirst?.questions??[]).map<Widget>((q) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(14),
-                                  border: Border.all(
-                                    color: const Color(0xFFE4E8F0),
-                                  ),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        q?.questionText??'',
-                                        style: GoogleFonts.rubik(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                        ),
-                                      ),
+                                  child: Text(
+                                    q?.answer ?? '',
+                                    style: GoogleFonts.rubik(
+                                      fontSize: 13,
+                                      color: Colors.black87,
                                     ),
-                                    const SizedBox(width: 10),
-
-                                    // Actions
-                                    Column(
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey.shade100,
-                                              borderRadius: BorderRadius.circular(8)),
-                                          child: Text(
-                                            q?.answer??'',
-                                            style: GoogleFonts.rubik(
-                                                fontSize: 13, color: Colors.black87),
-                                          ),
-                                        ),
-
-                                        const SizedBox(height: 10),
-
-                                        Row(
-                                          children: [
-                                            Icon(Icons.edit, size: 20, color: Colors.grey[700]),
-                                            const SizedBox(width: 14),
-                                            Icon(Icons.delete, size: 20, color: Colors.red),
-                                          ],
-                                        )
-                                      ],
-                                    )
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Icon(Icons.edit, size: 20, color: Colors.grey[700]),
+                                    const SizedBox(width: 14),
+                                    Icon(Icons.delete, size: 20, color: Colors.red),
                                   ],
                                 ),
-                              ),
-                            );
-                          }).toList(),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                );
-              })
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              )
+
+
             ],
           ),
         ),

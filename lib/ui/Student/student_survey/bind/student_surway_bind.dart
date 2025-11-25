@@ -72,7 +72,7 @@ class StudentSurwayController extends GetxController {
   }
 
   BaseClassModel? baseClassModel;
-
+  QuizSubmitData?quizSubmitData;
   Future<void> submitFinalQuiz() async {
     if (quiz.value == null) return;
 
@@ -87,14 +87,14 @@ class StudentSurwayController extends GetxController {
     }
 
     try {
-      baseClassModel = await Api.to.submitQuiz(
+      quizSubmitData = await Api.to.submitQuiz(
         quizId: q.id,
         studentId: int.parse(profileModelClass?.data?.id??'0'),
         answers: answerPayload,
       );
-      if (baseClassModel?.success ?? true) {
-        final resultData = QuizSubmitData.fromJson(baseClassModel!.data);
-        showQuizResultPopup(resultData);
+      if (quizSubmitData?.success ?? true) {
+        // showQuizResultPopup(quizSubmitData?.data);
+        Get.offAllNamed(Routes.studentNavPage);
       } else {
         Get.snackbar("Error", baseClassModel?.message ?? '');
       }

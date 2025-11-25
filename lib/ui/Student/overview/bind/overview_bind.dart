@@ -12,6 +12,8 @@ class StudentOverViewBinding implements Bindings {
 }
 
 class StudentOverViewController extends GetxController {
+  static StudentOverViewController get to => Get.find();
+
   ProfileModelClass? profileModelClass;
   DashboardSummary?dashboardSummary;
   @override

@@ -6,15 +6,16 @@ class StudentNavBinding implements Bindings {
   void dependencies() {
     Get.put(StudentNavController());
     Get.put(StudentOverViewController());
-
   }
 }
-
 
 class StudentNavController extends GetxController {
   RxInt currentIndex = 0.obs;
 
   void changeTab(int index) {
+    if (index == 0) {
+      StudentOverViewController.to.onInit();
+    }
     currentIndex.value = index;
   }
 }

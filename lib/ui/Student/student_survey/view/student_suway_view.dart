@@ -1,4 +1,4 @@
-import 'package:dental_surway/model/quiz_submit_model.dart';
+import 'package:dental_surway/model/quiz_submit_model.dart' as m;
 import 'package:dental_surway/ui/Student/student_survey/bind/student_surway_bind.dart';
 import 'package:dental_surway/utls/common_widgets.dart';
 import 'package:dental_surway/utls/routes.dart';
@@ -236,7 +236,31 @@ class StudentSurveyView extends StatelessWidget {
   }
 }
 
-void showQuizResultPopup(QuizSubmitData data) {
+void showQuizResultPopup(m.Data? data) {
+  final double scorePercent =
+      ((data?.correct??0) / (data?.totalQuestions??0)) * 100;
+
+  Color scoreColor;
+  String scoreStatus;
+
+  if (scorePercent >= 80) {
+    scoreColor = Colors.green;
+    scoreStatus = "Excellent";
+  } else if (scorePercent >= 60) {
+    scoreColor = Colors.blue;
+    scoreStatus = "Good";
+  } else if (scorePercent >= 40) {
+    scoreColor = Colors.orange;
+    scoreStatus = "Fair";
+  } else {
+    scoreColor = Colors.red;
+    scoreStatus = "Poor / Bad";
+  }
+
+  String recommendation = (data?.passed??false)
+      ? "Keep up the good dental health! 👍"
+      : "Immediate dental consultation recommended";
+
   Get.dialog(
     Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -248,56 +272,61 @@ void showQuizResultPopup(QuizSubmitData data) {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Title
+
               Text(
                 "Survey Result",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
 
               const SizedBox(height: 15),
 
-              // Total Score Card
+              // ===== Score Card =====
               Container(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black12, blurRadius: 8, spreadRadius: 1)
+                  ],
                 ),
                 child: Column(
                   children: [
                     Text(
-                      "${data.marks}",
+                      "${data?.marks??0}",
                       style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
+                        color: scoreColor,
+                        fontSize: 55,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const SizedBox(height: 6),
+
+                    const SizedBox(height: 8),
+
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
+                          horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
-                        color: Colors.red.shade600,
+                        color: scoreColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        data.passed ? "Good" : "Poor / Bad",
+                        scoreStatus,
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
+                            color: Colors.white, fontSize: 13),
                       ),
                     ),
+
                     const SizedBox(height: 10),
+
                     Text(
-                      data.passed
-                          ? "Great dental health!"
-                          : "Immediate dental consultation recommended",
+                      recommendation,
                       textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: scoreColor,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
@@ -305,7 +334,7 @@ void showQuizResultPopup(QuizSubmitData data) {
 
               const SizedBox(height: 20),
 
-              // Score Breakdown Card
+              // ===== Score Breakdown =====
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
@@ -316,33 +345,31 @@ void showQuizResultPopup(QuizSubmitData data) {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Score Breakdown",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade900,
-                      ),
-                    ),
-                    const SizedBox(height: 14),
+                    Text("Score Breakdown",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue.shade900)),
+
+                    const SizedBox(height: 16),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        columnScore("Problems Present", data.wrong),
-                        columnScore("Problems Absent", data.correct),
+                        _scoreItem("Problems Present", data?.wrong??0),
+                        _scoreItem("Problems Absent", data?.correct??0),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 25),
 
-              // Next Button
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
                   onPressed: () => Get.offAllNamed(Routes.studentNavPage),
-                  child: Text("Done"),
+                  child: const Text("Done"),
                 ),
               ),
             ],
@@ -352,6 +379,24 @@ void showQuizResultPopup(QuizSubmitData data) {
     ),
   );
 }
+
+Widget _scoreItem(String title, int value) {
+  return Column(
+    children: [
+      Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.w500),
+      ),
+      const SizedBox(height: 6),
+      Text(
+        "$value",
+        style: const TextStyle(
+            fontSize: 24, fontWeight: FontWeight.w700),
+      ),
+    ],
+  );
+}
+
 
 Widget columnScore(String title, int value) {
   return Column(

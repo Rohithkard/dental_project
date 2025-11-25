@@ -14,6 +14,8 @@ class QuestinBind implements Bindings {
 }
 
 class QuestionsController extends GetxController {
+  static QuestionsController get to => Get.find();
+
   // UI Controllers
   RxList<QuestionModel> createdQuestions = <QuestionModel>[].obs;
   RxString selectedGroup = "".obs;
@@ -74,13 +76,16 @@ class QuestionsController extends GetxController {
     };
 
     // final response = await post("/admin/quiz/$quizId/add-question", payload);
-    baseClassModel =await Api.to.createSubQuestions(json: payload, questionId: 1);
-    if (baseClassModel?.success??true) {
+    baseClassModel = await Api.to.createSubQuestions(
+      json: payload,
+      questionId: 1,
+    );
+    if (baseClassModel?.success ?? true) {
       createdQuestions.clear();
       Get.back();
       Get.snackbar("Success", "Questions Added!");
     } else {
-      Get.snackbar("Error", baseClassModel?.message??'');
+      Get.snackbar("Error", baseClassModel?.message ?? '');
     }
   }
 
@@ -92,28 +97,35 @@ class QuestionsController extends GetxController {
     };
 
     baseClassModel = await Api.to.createSubQuestionsPatch(
-      json: payload, questionId: 1,
+      json: payload,
+      questionId: 1,
     );
 
-    if (baseClassModel?.success??false) {
+    if (baseClassModel?.success ?? false) {
       Get.back();
       Get.snackbar("Updated", "Question updated successfully");
     } else {
-      Get.snackbar("Error", baseClassModel?.message??'');
+      Get.snackbar("Error", baseClassModel?.message ?? '');
     }
   }
-  QuizModelClassAdmin?quizModelClassAdmin;
 
-  void getQuiz() async{
-    try{
+  QuizModelClassAdmin? quizModelClassAdmin;
+
+  void getQuiz() async {
+    try {
       EasyLoading.show();
-      quizModelClassAdmin=await Api.to.getQuestionsController();
+      quizModelClassAdmin = await Api.to.getQuestionsController();
       EasyLoading.dismiss();
-    }catch(e){
+    } catch (e) {
       EasyLoading.showToast('Error$e');
-    }finally{
+    } finally {
       update();
     }
   }
 
+  @override
+  void onInit() {
+    getQuiz();
+    super.onInit();
+  }
 }
