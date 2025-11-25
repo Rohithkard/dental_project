@@ -1,10 +1,10 @@
+import 'package:dental_surway/model/quiz_submit_model.dart';
 import 'package:dental_surway/ui/Student/student_survey/bind/student_surway_bind.dart';
 import 'package:dental_surway/utls/common_widgets.dart';
+import 'package:dental_surway/utls/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
 
 class StudentSurveyView extends StatelessWidget {
   StudentSurveyView({super.key});
@@ -15,9 +15,7 @@ class StudentSurveyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.quiz.value == null) {
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       }
 
       final quiz = controller.quiz.value!;
@@ -35,7 +33,7 @@ class StudentSurveyView extends StatelessWidget {
               children: [
                 // Header
                 Text(
-                  "Welcome Jacob!",
+                  "Welcome ${controller.profileModelClass?.data?.name ?? ''}",
                   style: GoogleFonts.rubik(
                     fontSize: 22,
                     fontWeight: FontWeight.w700,
@@ -43,7 +41,10 @@ class StudentSurveyView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text("ID: asd", style: GoogleFonts.rubik(color: Colors.grey)),
+                Text(
+                  "ID: ${controller.profileModelClass?.data?.id ?? ''}",
+                  style: GoogleFonts.rubik(color: Colors.grey),
+                ),
 
                 const SizedBox(height: 20),
 
@@ -57,7 +58,6 @@ class StudentSurveyView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       // Title = quiz name
                       Text(
                         quiz.quizName,
@@ -71,7 +71,9 @@ class StudentSurveyView extends StatelessWidget {
                       Text(
                         "Question ${sectionIndex + 1} of ${quiz.questions.length}",
                         style: GoogleFonts.rubik(
-                            fontSize: 14, color: Colors.grey.shade600),
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
 
                       const SizedBox(height: 12),
@@ -84,7 +86,8 @@ class StudentSurveyView extends StatelessWidget {
                           value: (sectionIndex + 1) / quiz.questions.length,
                           backgroundColor: Colors.grey.shade300,
                           valueColor: const AlwaysStoppedAnimation<Color>(
-                              Color(0xFF0A61FF)),
+                            Color(0xFF0A61FF),
+                          ),
                         ),
                       ),
 
@@ -99,8 +102,9 @@ class StudentSurveyView extends StatelessWidget {
                             Text(
                               question.question,
                               style: GoogleFonts.rubik(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             const SizedBox(height: 12),
 
@@ -108,13 +112,21 @@ class StudentSurveyView extends StatelessWidget {
                               children: [
                                 AnswerButton(
                                   label: "Yes",
-                                  selected: controller.answers[sectionIndex] == "yes",
-                                  onTap: () => controller.selectAnswer(sectionIndex, "yes"),
+                                  selected:
+                                      controller.answers[sectionIndex] == "yes",
+                                  onTap: () => controller.selectAnswer(
+                                    sectionIndex,
+                                    "yes",
+                                  ),
                                 ),
                                 AnswerButton(
                                   label: "No",
-                                  selected: controller.answers[sectionIndex] == "no",
-                                  onTap: () => controller.selectAnswer(sectionIndex, "no"),
+                                  selected:
+                                      controller.answers[sectionIndex] == "no",
+                                  onTap: () => controller.selectAnswer(
+                                    sectionIndex,
+                                    "no",
+                                  ),
                                 ),
                               ],
                             ),
@@ -131,8 +143,9 @@ class StudentSurveyView extends StatelessWidget {
                             Expanded(
                               child: OutlinedButton(
                                 style: OutlinedButton.styleFrom(
-                                  padding:
-                                  const EdgeInsets.symmetric(vertical: 14),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 14,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -141,22 +154,23 @@ class StudentSurveyView extends StatelessWidget {
                                 child: Text(
                                   "◀ Previous",
                                   style: GoogleFonts.rubik(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: const Color(0xFF0A61FF)),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF0A61FF),
+                                  ),
                                 ),
                               ),
                             ),
 
-                          if (sectionIndex > 0)
-                            const SizedBox(width: 12),
+                          if (sectionIndex > 0) const SizedBox(width: 12),
 
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF0A61FF),
-                                padding:
-                                const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -175,9 +189,10 @@ class StudentSurveyView extends StatelessWidget {
                                     ? "Submit ▶"
                                     : "Next ▶",
                                 style: GoogleFonts.rubik(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -205,7 +220,7 @@ class StudentSurveyView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
         total,
-            (index) => Container(
+        (index) => Container(
           width: 28,
           height: 6,
           margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -219,4 +234,134 @@ class StudentSurveyView extends StatelessWidget {
       ),
     );
   }
+}
+
+void showQuizResultPopup(QuizSubmitData data) {
+  Get.dialog(
+    Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        width: 350,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title
+              Text(
+                "Survey Result",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+
+              const SizedBox(height: 15),
+
+              // Total Score Card
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      "${data.marks}",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade600,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        data.passed ? "Good" : "Poor / Bad",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      data.passed
+                          ? "Great dental health!"
+                          : "Immediate dental consultation recommended",
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Score Breakdown Card
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8)],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Score Breakdown",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade900,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        columnScore("Problems Present", data.wrong),
+                        columnScore("Problems Absent", data.correct),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // Next Button
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: () => Get.offAllNamed(Routes.studentNavPage),
+                  child: Text("Done"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget columnScore(String title, int value) {
+  return Column(
+    children: [
+      Text(title),
+      const SizedBox(height: 6),
+      Text(
+        "$value",
+        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+      ),
+    ],
+  );
 }

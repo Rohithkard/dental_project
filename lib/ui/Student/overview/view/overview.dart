@@ -105,8 +105,7 @@ class OverviewView extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   // ---------------- SURVEY COMPLETE CARD ----------------
-                  ((logic.dashboardSummary?.data ?? []).isEmpty)
-                      ? Container(
+                  Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 24,
@@ -126,7 +125,7 @@ class OverviewView extends StatelessWidget {
                               const SizedBox(height: 16),
 
                               Text(
-                                "Survey Complete!",
+                                ((logic.dashboardSummary?.data ?? []).isEmpty)?'Conduct Surway':"Survey Complete!",
                                 style: GoogleFonts.rubik(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
@@ -136,7 +135,7 @@ class OverviewView extends StatelessWidget {
                               const SizedBox(height: 6),
 
                               Text(
-                                "Thank you for completing the dental survey",
+                                ((logic.dashboardSummary?.data ?? []).isEmpty)?"please Take Surway": "Thank you for completing the dental survey",
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.rubik(
                                   fontSize: 14,
@@ -221,8 +220,7 @@ class OverviewView extends StatelessWidget {
                               ),
                             ],
                           ),
-                        )
-                      : Center(),
+                        ),
 
                   const SizedBox(height: 24),
 

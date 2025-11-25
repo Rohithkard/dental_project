@@ -14,154 +14,139 @@ class AddQuestionSheet extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-
-      child: SingleChildScrollView(
+      child: Obx(() => SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
+            // Header Row
             Row(
               children: [
                 Expanded(
                   child: Text(
                     "Add New Question",
                     style: GoogleFonts.rubik(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                        fontSize: 20, fontWeight: FontWeight.w600
                     ),
                   ),
                 ),
                 InkWell(
-                  onTap: () => Get.back(),
-                  child: const Icon(Icons.close, size: 26),
-                )
+                    onTap: () => Get.back(),
+                    child: const Icon(Icons.close, size: 26))
               ],
             ),
 
             const SizedBox(height: 6),
-
             Text(
-              "Create a new survey question and add it to a question group",
+              "Create a new survey question",
               style: GoogleFonts.rubik(
-                color: Colors.grey[600],
-                fontSize: 14,
-              ),
+                  color: Colors.grey[600], fontSize: 14),
             ),
 
             const SizedBox(height: 24),
 
-            // Group dropdown
-            Text("Question Group", style: GoogleFonts.rubik(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 8),
-
-            Obx(() {
-              return DropdownButtonFormField<String>(
-                value: controller.selectedGroup.value.isEmpty
-                    ? null
-                    : controller.selectedGroup.value,
-                decoration: dropdownDecoration(),
-                items: controller.groups
-                    .map((g) => DropdownMenuItem<String>(
-                  value: g["title"] as String,
-                  child: Text(g["title"] as String),
-                ))
-                    .toList(),
-                onChanged: (value) => controller.selectedGroup.value = value ?? "",
-                hint: const Text("Select a group"),
-              );
-            }),
-
-            const SizedBox(height: 20),
-
-            // Question text
-            Text("Question Text", style: GoogleFonts.rubik(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 8),
-
+            Text("Question Text",
+                style: GoogleFonts.rubik(fontWeight: FontWeight.w500)),
+            const SizedBox(height: 6),
             TextField(
               controller: controller.questionText,
-              decoration: inputDecoration("Enter your question"),
+              decoration: inputDecoration("Enter question"),
+            ),
+
+            const SizedBox(height: 16),
+
+            Text("Answer (Yes/No or Option)",
+                style: GoogleFonts.rubik(fontWeight: FontWeight.w500)),
+            const SizedBox(height: 6),
+            TextField(
+              controller: controller.answerText,
+              decoration: inputDecoration("Enter answer"),
             ),
 
             const SizedBox(height: 20),
+            _previewAddedQuestions(),
 
-            // Type dropdown
-            Text("Question Type", style: GoogleFonts.rubik(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
 
-            Obx(() {
-              return DropdownButtonFormField<String>(
-                value: controller.questionType.value,
-                items: controller.questionTypes
-                    .map((t) => DropdownMenuItem(value: t, child: Text(t)))
-                    .toList(),
-                decoration: dropdownDecoration(),
-                onChanged: (v) => controller.questionType.value = v!,
-              );
-            }),
-
-            const SizedBox(height: 20),
-
-            // Conditional checkbox
-            Obx(() {
-              return Row(
-                children: [
-                  Checkbox(
-                    value: controller.conditional.value,
-                    onChanged: (v) => controller.conditional.value = v!,
-                  ),
-                  Text("Show this question conditionally",
-                      style: GoogleFonts.rubik(fontSize: 14)),
-                ],
-              );
+            _primaryButton("Add More", () {
+              controller.addLocalQuestion();
             }),
 
             const SizedBox(height: 12),
 
-            // Add Question Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF0A61FF),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                onPressed: () {},
-                child: Text(
-                  "Add Question",
-                  style: GoogleFonts.rubik(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
+            controller.createdQuestions.isEmpty
+                ? const SizedBox()
+                : _primaryButton("Submit to Quiz", () {
+              controller.addMoreQuestions(quizId: 1);
+            }),
 
             const SizedBox(height: 10),
 
             Center(
               child: GestureDetector(
                 onTap: () => Get.back(),
-                child: Text(
-                  "Cancel",
-                  style: GoogleFonts.rubik(
-                    color: Colors.blue,
-                    fontSize: 16,
-                  ),
-                ),
+                child: Text("Cancel",
+                    style: GoogleFonts.rubik(
+                        color: Colors.blue, fontSize: 16)),
               ),
             ),
-
             const SizedBox(height: 20),
           ],
         ),
+      )),
+    );
+  }
+
+  Widget _previewAddedQuestions() {
+    if (controller.createdQuestions.isEmpty) {
+      return Container();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Added Questions",
+            style: GoogleFonts.rubik(
+                fontWeight: FontWeight.w600, fontSize: 16)),
+        const SizedBox(height: 8),
+        ...controller.createdQuestions.map((q) => Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF7F7F7),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                  child: Text(q.questionText,
+                      style: GoogleFonts.rubik(fontSize: 14))),
+              Text(q.answer,
+                  style: GoogleFonts.rubik(
+                      fontSize: 13, color: Colors.deepPurple)),
+            ],
+          ),
+        )),
+      ],
+    );
+  }
+
+  Widget _primaryButton(String label, Function() onTap) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFF0A61FF),
+          padding: const EdgeInsets.symmetric(vertical: 13),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8)),
+        ),
+        onPressed: onTap,
+        child: Text(label,
+            style: GoogleFonts.rubik(
+                fontWeight: FontWeight.w500, color: Colors.white)),
       ),
     );
   }
@@ -171,23 +156,12 @@ class AddQuestionSheet extends StatelessWidget {
       hintText: hint,
       filled: true,
       fillColor: const Color(0xFFF7F8F9),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      contentPadding:
+      const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
-      ),
-    );
-  }
-
-  InputDecoration dropdownDecoration() {
-    return InputDecoration(
-      filled: true,
-      fillColor: const Color(0xFFF7F8F9),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Color(0xFFE8ECF4)),
-      ),
+          borderRadius: BorderRadius.circular(10),
+          borderSide:
+          const BorderSide(color: Color(0xFFE8ECF4))),
     );
   }
 }

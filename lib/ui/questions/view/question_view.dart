@@ -1,6 +1,7 @@
 import 'package:dental_surway/ui/questions/bind/questions_controller.dart';
 import 'package:dental_surway/ui/questions/view/add_question_sheet.dart';
 import 'package:dental_surway/utls/common_widgets.dart';
+import 'package:dental_surway/utls/utlis.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -107,7 +108,7 @@ class QuestionsView extends StatelessWidget {
               // Groups + questions list
               Obx(() {
                 return Column(
-                  children: controller.groups.map((group) {
+                  children: (controller.quizModelClassAdmin?.data?.quiz?.cFirst?.questions??[]).map((group) {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 18),
                       padding: const EdgeInsets.all(18),
@@ -124,7 +125,7 @@ class QuestionsView extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  group["title"],
+                                  group?.questionText??'',
                                   style: GoogleFonts.rubik(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
@@ -139,7 +140,7 @@ class QuestionsView extends StatelessWidget {
                                   color: Colors.black,
                                 ),
                                 child: Text(
-                                  "${group["questionsCount"]} questions",
+                                  "${controller?.quizModelClassAdmin?.data?.total??0} questions",
                                   style: GoogleFonts.rubik(
                                     color: Colors.white,
                                     fontSize: 13,
@@ -152,7 +153,7 @@ class QuestionsView extends StatelessWidget {
                           const SizedBox(height: 18),
 
                           // Questions
-                          ...group["questions"].map<Widget>((q) {
+                          ...(controller.quizModelClassAdmin?.data?.quiz?.cFirst?.questions??[]).map<Widget>((q) {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 12),
                               child: Container(
@@ -169,7 +170,7 @@ class QuestionsView extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        q["text"],
+                                        q?.questionText??'',
                                         style: GoogleFonts.rubik(
                                           fontSize: 16,
                                           color: Colors.black,
@@ -187,7 +188,7 @@ class QuestionsView extends StatelessWidget {
                                               color: Colors.grey.shade100,
                                               borderRadius: BorderRadius.circular(8)),
                                           child: Text(
-                                            q["type"],
+                                            q?.answer??'',
                                             style: GoogleFonts.rubik(
                                                 fontSize: 13, color: Colors.black87),
                                           ),

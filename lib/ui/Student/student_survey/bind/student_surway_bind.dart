@@ -1,7 +1,11 @@
 import 'package:dental_surway/model/base_model_class.dart';
+import 'package:dental_surway/model/profile_model_class.dart';
 import 'package:dental_surway/model/quiz_model.dart';
+import 'package:dental_surway/model/quiz_submit_model.dart';
+import 'package:dental_surway/ui/Student/student_survey/view/student_suway_view.dart';
 import 'package:dental_surway/utls/api_controller.dart';
 import 'package:dental_surway/utls/routes.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class StudentSurwayBinding implements Bindings {
@@ -34,10 +38,25 @@ class StudentSurwayController extends GetxController {
     answers.refresh();
   }
 
+  ProfileModelClass? profileModelClass;
+
   @override
   void onInit() {
+    getProfile();
     loadQuiz(1);
     super.onInit();
+  }
+
+  void getProfile() async {
+    try {
+      EasyLoading.show();
+      profileModelClass = await Api.to.getProfile();
+      EasyLoading.dismiss();
+    } catch (e) {
+      EasyLoading.showToast('Error : $e');
+    } finally {
+      update();
+    }
   }
 
   void nextQuestion() {
@@ -70,12 +89,12 @@ class StudentSurwayController extends GetxController {
     try {
       baseClassModel = await Api.to.submitQuiz(
         quizId: q.id,
-        studentId: 1,
+        studentId: int.parse(profileModelClass?.data?.id??'0'),
         answers: answerPayload,
       );
       if (baseClassModel?.success ?? true) {
-        Get.snackbar("Success", baseClassModel?.message ?? '');
-        Get.offNamed(Routes.studentNavPage);
+        final resultData = QuizSubmitData.fromJson(baseClassModel!.data);
+        showQuizResultPopup(resultData);
       } else {
         Get.snackbar("Error", baseClassModel?.message ?? '');
       }

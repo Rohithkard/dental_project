@@ -1,9 +1,11 @@
+import 'package:dental_surway/ui/admin_dashboard/bind/admin_dashboard_controller.dart';
 import 'package:get/get.dart';
 
 class AdminNavBinding implements Bindings {
   @override
   void dependencies() {
     Get.put(AdminNavController());
+    Get.put(AdminDashboardController());
   }
 }
 

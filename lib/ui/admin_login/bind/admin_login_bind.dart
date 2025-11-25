@@ -1,6 +1,9 @@
+import 'package:dental_surway/model/admin_dashboard_class.dart';
 import 'package:dental_surway/model/admin_login_model_class.dart';
 import 'package:dental_surway/utls/api_controller.dart';
+import 'package:dental_surway/utls/com_binding.dart';
 import 'package:dental_surway/utls/routes.dart';
+import 'package:dental_surway/utls/session_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -22,20 +25,12 @@ class AdminLoginController extends GetxController {
   RxBool obscure = true.obs;
 
   AdminLoginModel?adminLoginModel;
+  DashboardViewModel?dashboardViewModel;
 
   void togglePassword() {
     obscure.value = !obscure.value;
   }
 
-  void login() {
-    if (email.text.isEmpty || password.text.isEmpty) {
-      Get.snackbar("Missing Fields", "Please fill email and password");
-      return;
-    }
-
-    // TODO: Call API
-    Get.offAllNamed(Routes.mainAdminRoute);
-  }
 
   void loginAdmin() async {
     EasyLoading.show();
@@ -46,9 +41,13 @@ class AdminLoginController extends GetxController {
     );
     EasyLoading.dismiss();
     if (adminLoginModel?.success ?? true) {
+      AppSession.to.session.write(SessionKeys.API_KEY, adminLoginModel?.data?.apiKey??'');
+      Get.toNamed(Routes.mainAdminRoute);
     } else {
       Get.snackbar("Error", adminLoginModel?.message ?? '');
     }
   }
+
+
 
 }

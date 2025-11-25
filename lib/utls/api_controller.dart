@@ -1,8 +1,11 @@
+import 'package:dental_surway/model/admin_dashboard_class.dart';
 import 'package:dental_surway/model/admin_login_model_class.dart';
+import 'package:dental_surway/model/admin_profile_class.dart';
 import 'package:dental_surway/model/base_model_class.dart';
 import 'package:dental_surway/model/dashboard_summary.dart';
 import 'package:dental_surway/model/otp_verified_model.dart';
 import 'package:dental_surway/model/profile_model_class.dart';
+import 'package:dental_surway/model/quiz_admin_model_class.dart';
 import 'package:dental_surway/model/quiz_model.dart';
 import 'package:dental_surway/model/sign_up_model_class.dart';
 import 'package:dental_surway/utls/com_binding.dart';
@@ -118,6 +121,25 @@ class Api extends GetConnect {
       return ProfileModelClass.fromJson(value.body ?? err);
     });
   }
+
+  Future<ProfileAdminModelClass> getAdminProfile() {
+    return get(
+        '/admin/profile'
+    ).then((value) {
+
+      return ProfileAdminModelClass.fromJson(value.body ?? err);
+    });
+  }
+
+  Future<DashboardViewModel> getDashboardView() {
+    return get(
+        '/admin/dashboard/view'
+    ).then((value) {
+
+      return DashboardViewModel.fromJson(value.body ?? err);
+    });
+  }
+
   Future<DashboardSummary> getDashboardOverView({required var no}) {
     return get(
       '/user/dashboard/summary/$no'
@@ -130,6 +152,12 @@ class Api extends GetConnect {
   Future<QuizModel> getQuizQuestions(int quizId) {
     return get("/user/quiz/$quizId/questions").then((value) {
       return QuizModel.fromJson(value.body["data"]);
+    });
+  }
+
+  Future<QuizModelClassAdmin> getQuestionsController() {
+    return get("/admin/quiz/list/1").then((value) {
+      return QuizModelClassAdmin.fromJson(value.body["data"]);
     });
   }
 
@@ -146,6 +174,47 @@ class Api extends GetConnect {
       },
     ).then((value) {
       return BaseClassModel.fromJson(value.body["data"]);
+    });
+  }
+
+  Future<BaseClassModel> createQuiz({
+    required Map<String, dynamic> json,
+  }) {
+    return post(
+      '/admin/quiz/create',
+      json,
+    ).then((value) {
+      return BaseClassModel.fromJson(value.body);
+    }).catchError((err) {
+      return BaseClassModel.fromJson({"success": false, "message": err.toString()});
+    });
+  }
+
+  Future<BaseClassModel> createSubQuestions({
+    required Map<String, dynamic> json,
+    required var questionId,
+  }) {
+    return post(
+      '/admin/quiz/$questionId/add-question',
+      json,
+    ).then((value) {
+      return BaseClassModel.fromJson(value.body);
+    }).catchError((err) {
+      return BaseClassModel.fromJson({"success": false, "message": err.toString()});
+    });
+  }
+
+  Future<BaseClassModel> createSubQuestionsPatch({
+    required Map<String, dynamic> json,
+    required var questionId,
+  }) {
+    return patch(
+      '/admin/quiz/$questionId/add-question',
+      json,
+    ).then((value) {
+      return BaseClassModel.fromJson(value.body);
+    }).catchError((err) {
+      return BaseClassModel.fromJson({"success": false, "message": err.toString()});
     });
   }
 
