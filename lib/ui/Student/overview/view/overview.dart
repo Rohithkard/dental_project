@@ -2,6 +2,7 @@ import 'package:dental_surway/ui/Student/overview/bind/overview_bind.dart';
 import 'package:dental_surway/ui/student_login/view/student_login_view.dart';
 import 'package:dental_surway/utls/com_binding.dart';
 import 'package:dental_surway/utls/routes.dart';
+import 'package:dental_surway/utls/utlis.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -67,7 +68,6 @@ class OverviewView extends StatelessWidget {
 
                             onConfirm: () {
                               AppSession.to.logout();
-                              Get.back(); // close dialog
                             },
                           );
                         },
@@ -175,7 +175,7 @@ class OverviewView extends StatelessWidget {
                                     Text(
                                       (logic
                                                   .dashboardSummary
-                                                  ?.data?[0]
+                                                  ?.data?.cFirst
                                                   ?.correct ??
                                               '0')
                                           .toString(),

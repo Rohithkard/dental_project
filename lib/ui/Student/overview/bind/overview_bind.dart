@@ -19,7 +19,7 @@ class StudentOverViewController extends GetxController {
   @override
   void onInit() {
     getProfile();
-    getDashboardSummary();
+
     super.onInit();
   }
 
@@ -28,6 +28,7 @@ class StudentOverViewController extends GetxController {
       EasyLoading.show();
       profileModelClass = await Api.to.getProfile();
       EasyLoading.dismiss();
+      getDashboardSummary();
     } catch (e) {
       EasyLoading.showToast('Error : ${e}');
     } finally {
@@ -38,7 +39,7 @@ class StudentOverViewController extends GetxController {
   void getDashboardSummary() async{
     try {
       EasyLoading.show();
-      dashboardSummary = await Api.to.getDashboardOverView(no: 1);
+      dashboardSummary = await Api.to.getDashboardOverView(no: profileModelClass?.data?.id??0);
       EasyLoading.dismiss();
     } catch (e) {
       EasyLoading.showToast('Error : ${e}');

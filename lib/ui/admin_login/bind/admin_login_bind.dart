@@ -42,7 +42,9 @@ class AdminLoginController extends GetxController {
     EasyLoading.dismiss();
     if (adminLoginModel?.success ?? true) {
       AppSession.to.session.write(SessionKeys.API_KEY, adminLoginModel?.data?.apiKey??'');
-      Get.toNamed(Routes.mainAdminRoute);
+      AppSession.to.session.write(SessionKeys.STUDENT_OR_ADMIN, 'admin');
+
+      Get.offAllNamed(Routes.mainAdminRoute);
     } else {
       Get.snackbar("Error", adminLoginModel?.message ?? '');
     }

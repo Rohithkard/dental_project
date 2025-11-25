@@ -3,11 +3,13 @@ import 'package:dental_surway/model/admin_login_model_class.dart';
 import 'package:dental_surway/model/admin_profile_class.dart';
 import 'package:dental_surway/model/base_model_class.dart';
 import 'package:dental_surway/model/dashboard_summary.dart';
+import 'package:dental_surway/model/excel_downlod.dart';
 import 'package:dental_surway/model/otp_verified_model.dart';
 import 'package:dental_surway/model/profile_model_class.dart';
 import 'package:dental_surway/model/quiz_admin_model_class.dart';
 import 'package:dental_surway/model/quiz_model.dart';
 import 'package:dental_surway/model/quiz_submit_model.dart';
+import 'package:dental_surway/model/quizz_model_class.dart';
 import 'package:dental_surway/model/sign_up_model_class.dart';
 import 'package:dental_surway/utls/com_binding.dart';
 import 'package:dental_surway/utls/const.dart';
@@ -115,13 +117,35 @@ class Api extends GetConnect {
 
   Future<QuizModel> getQuizQuestions(int quizId) {
     return get("/user/quiz/$quizId/questions").then((value) {
-      return QuizModel.fromJson(value.body ?? err);
+      return QuizModel.fromJson(value.body["data"]);
     });
   }
 
   Future<QuizModelClassAdmin> getQuestionsController() {
     return get("/admin/quiz/list/1").then((value) {
       return QuizModelClassAdmin.fromJson(value.body ?? err);
+    });
+  }
+
+  Future<QuizAdminModelClass> getQuizAttempt({
+    required var page,
+    required var search,
+  }) {
+    return get("/admin/students/quiz-attempt/$page?search=$search").then((
+      value,
+    ) {
+      return QuizAdminModelClass.fromJson(value.body ?? err);
+    });
+  }
+
+  Future<ExcelDownloadModel> getExcelDownload({
+
+    required var search,
+  }) {
+    return get("/admin/students/excel-download?search=$search").then((
+        value,
+        ) {
+      return ExcelDownloadModel.fromJson(value.body ?? err);
     });
   }
 

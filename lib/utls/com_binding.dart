@@ -21,6 +21,6 @@ class AppSession extends GetxController {
   Future<void> logout() async {
     session.erase();
     AppController.to.onInit();
-    Get.offNamed(Routes.splash);
+    Get.offAllNamed(Routes.splash);
   }
 }

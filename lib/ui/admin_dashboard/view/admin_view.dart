@@ -16,6 +16,7 @@ class AdminDashboardView extends StatelessWidget {
 
       body: SafeArea(
         child: SingleChildScrollView(
+          controller: AdminDashboardController.to.scrollController,
           padding: const EdgeInsets.all(16),
           child: GetBuilder<AdminDashboardController>(
             builder: (controller) {
@@ -35,20 +36,25 @@ class AdminDashboardView extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           AppSession.to.logout();
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.exit_to_app,
-                                  size: 20, color: Colors.blue.shade700),
+                              Icon(
+                                Icons.exit_to_app,
+                                size: 20,
+                                color: Colors.blue.shade700,
+                              ),
                               const SizedBox(width: 6),
                               Text(
                                 "Logout",
@@ -68,8 +74,10 @@ class AdminDashboardView extends StatelessWidget {
 
                   Text(
                     "Manage and view student surveys",
-                    style:
-                    GoogleFonts.rubik(color: Colors.grey.shade600, fontSize: 14),
+                    style: GoogleFonts.rubik(
+                      color: Colors.grey.shade600,
+                      fontSize: 14,
+                    ),
                   ),
 
                   const SizedBox(height: 20),
@@ -123,31 +131,44 @@ class AdminDashboardView extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF0A61FF),
-                                borderRadius: BorderRadius.circular(8),
+                            InkWell(
+                              onTap: (){
+                                controller.downloadExcel();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF0A61FF),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.upload,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      "Export CSV",
+                                      style: GoogleFonts.rubik(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.upload, color: Colors.white, size: 18),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    "Export CSV",
-                                    style: GoogleFonts.rubik(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              ),
-                            )
+                            ),
                           ],
                         ),
 
                         const SizedBox(height: 14),
 
-                        TextField(
+                        TextFormField(
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.search),
                             hintText: "Search for students",
@@ -155,10 +176,15 @@ class AdminDashboardView extends StatelessWidget {
                             fillColor: const Color(0xFFF7F8F9),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                              const BorderSide(color: Color(0xFFE8ECF4)),
+                              borderSide: const BorderSide(
+                                color: Color(0xFFE8ECF4),
+                              ),
                             ),
                           ),
+                          controller: controller.searchField,
+                          onChanged: (v){
+                            controller.getAttemptQuiz();
+                          },
                         ),
                       ],
                     ),
@@ -176,24 +202,48 @@ class AdminDashboardView extends StatelessWidget {
                   ),
 
                   Text(
-                    "Showing 1 of ${controller.dashboardViewModel?.data?.totalStudents??0} students",
-                    style:
-                    GoogleFonts.rubik(color: Colors.grey.shade600, fontSize: 14),
+                    "Showing 1 of ${controller.dashboardViewModel?.data?.totalStudents ?? 0} students",
+                    style: GoogleFonts.rubik(
+                      color: Colors.grey.shade600,
+                      fontSize: 14,
+                    ),
                   ),
                   const SizedBox(height: 16),
-                  ...(controller.dashboardViewModel?.data?.students??[]).map((s) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: StudentScoreTile(
-                        name: s?.name??'',
-                        score: 0,
-                        status: 'true',
-                      ),
-                    );
-                  }).toList(),
+                  Column(
+                    children: [
+                      ...controller.attempts.map((a) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: StudentScoreTile(
+                            name: a.student?.name ?? '',
+                           summary: a?.summary,
+                          ),
+                        );
+                      }).toList(),
+
+                      // Loader for pagination
+                      if (controller.isLoadingMore.value)
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
+
+                      // No more data
+                      if (!controller.hasMore.value)
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            "No more records",
+                            style: GoogleFonts.rubik(color: Colors.grey),
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
               );
-            }
+            },
           ),
         ),
       ),

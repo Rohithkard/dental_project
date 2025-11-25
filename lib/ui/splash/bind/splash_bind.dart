@@ -15,10 +15,20 @@ class SplashController extends GetxController {
 
   @override
   void onInit() {
-    var session=AppSession.to.session.read(SessionKeys.API_KEY);
-    if(session!=null){
-      Get.offAllNamed(Routes.studentNavPage);
-    }
     super.onInit();
+
+    Future.delayed(const Duration(seconds: 1), () {
+      var session = AppSession.to.session.read(SessionKeys.API_KEY);
+      if (session != null) {
+        var adminOrstudent=AppSession.to.session.read(SessionKeys.STUDENT_OR_ADMIN);
+        if(adminOrstudent=='student')
+          {
+            Get.offAllNamed(Routes.studentNavPage);
+          }else{
+          Get.offAllNamed(Routes.mainAdminRoute);
+        }
+      }
+    });
   }
+
 }

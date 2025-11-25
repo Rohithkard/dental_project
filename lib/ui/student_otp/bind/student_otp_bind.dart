@@ -43,8 +43,9 @@ class StudentOtpController extends GetxController {
 
     verifiedModelClass=await Api.to.userVerifyLogin(otpKey: otpKey, otp: this.otp);
     if(verifiedModelClass?.success??true){
+      AppSession.to.session.write(SessionKeys.STUDENT_OR_ADMIN, 'student');
       AppSession.to.session.write(SessionKeys.API_KEY, verifiedModelClass?.data?.key??'');
-      Get.toNamed(Routes.studentNavPage);
+      Get.offAllNamed(Routes.studentNavPage);
     }else{
       Get.snackbar("Error", verifiedModelClass?.message ?? '');
     }

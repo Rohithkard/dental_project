@@ -1,6 +1,7 @@
 import 'package:dental_surway/model/base_model_class.dart';
 import 'package:dental_surway/model/quiz_admin_model_class.dart';
 import 'package:dental_surway/model/quiz_create_model.dart';
+import 'package:dental_surway/ui/questions/view/question_view.dart';
 import 'package:dental_surway/utls/api_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -84,13 +85,14 @@ class QuestionsController extends GetxController {
       createdQuestions.clear();
       Get.back();
       Get.snackbar("Success", "Questions Added!");
+      getQuiz();
     } else {
       Get.snackbar("Error", baseClassModel?.message ?? '');
     }
   }
 
   // Update Single Question
-  Future<void> updateQuestion(String questionId) async {
+  Future<void> updateQuestion(int questionId) async {
     final payload = {
       "question_text": questionText.text,
       "answer": answerText.text,
@@ -98,12 +100,15 @@ class QuestionsController extends GetxController {
 
     baseClassModel = await Api.to.createSubQuestionsPatch(
       json: payload,
-      questionId: 1,
+      questionId: questionId,
     );
 
     if (baseClassModel?.success ?? false) {
       Get.back();
       Get.snackbar("Updated", "Question updated successfully");
+
+      getQuiz();
+      update();                // ⬅ rebuild GetBuilder
     } else {
       Get.snackbar("Error", baseClassModel?.message ?? '');
     }
@@ -128,4 +133,15 @@ class QuestionsController extends GetxController {
     getQuiz();
     super.onInit();
   }
+
+  void openEditSheet(q) {
+    questionText.text = q.questionText ?? "";
+    answerText.text = q.answer ?? "";
+
+    Get.bottomSheet(
+      EditQuestionSheet(question: q),
+      isScrollControlled: true,
+    );
+  }
+
 }

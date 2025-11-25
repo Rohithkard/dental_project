@@ -1,3 +1,4 @@
+import 'package:dental_surway/model/quizz_model_class.dart';
 import 'package:dental_surway/res/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -258,72 +259,151 @@ class MetricCard extends StatelessWidget {
 }
 
 class StudentScoreTile extends StatelessWidget {
-  final String name;
-  final String status;
-  final int score;
+  final String? name;
+  final Summary? summary;
 
   const StudentScoreTile({
     super.key,
     required this.name,
-    required this.status,
-    required this.score,
+    required this.summary,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool passed = summary?.passed ?? false;
+
     return Container(
       padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12.withOpacity(0.05),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top Row
+
+          // Student Name + Status Badge
           Row(
             children: [
               Expanded(
                 child: Text(
-                  name,
+                  name ?? "Unknown Student",
                   style: GoogleFonts.rubik(
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
 
-              // Status badge
               Container(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade100,
-                  borderRadius: BorderRadius.circular(6),
+                  color: passed ? Colors.green.shade100 : Colors.red.shade100,
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  status,
+                  passed ? "PASSED" : "FAILED",
                   style: GoogleFonts.rubik(
-                    color: Colors.red.shade700,
-                    fontWeight: FontWeight.w500,
+                    color: passed ? Colors.green.shade800 : Colors.red.shade800,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
                   ),
                 ),
               ),
             ],
           ),
 
+          const SizedBox(height: 14),
+
+          // Score Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _statItem("Score",
+                (summary?.score ?? 0).toString(),
+                Icons.star,
+                Colors.orange,
+              ),
+              _statItem("Correct",
+                (summary?.correct ?? 0).toString(),
+                Icons.check_circle,
+                Colors.green,
+              ),
+              _statItem("Wrong",
+                (summary?.wrong ?? 0).toString(),
+                Icons.cancel,
+                Colors.red,
+              ),
+            ],
+          ),
+
           const SizedBox(height: 12),
 
+          // Total Questions
           Row(
             children: [
-              Icon(Icons.remove_red_eye, size: 20, color: Colors.grey[700]),
-              const SizedBox(width: 16),
-              Icon(Icons.bar_chart, size: 20, color: Colors.grey[700]),
+              Icon(Icons.help_outline, color: Colors.blue.shade700, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                "Total Questions: ${summary?.totalQuestions ?? 0}",
+                style: GoogleFonts.rubik(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
             ],
-          )
+          ),
+
+          const SizedBox(height: 10),
+
+          // Completed Date
+          Row(
+            children: [
+              Icon(Icons.access_time, color: Colors.grey.shade700, size: 18),
+              const SizedBox(width: 8),
+              Text(
+                _formatDateSafe(summary?.completedAt),
+                style: GoogleFonts.rubik(fontSize: 13, color: Colors.grey.shade600),
+              ),
+            ],
+          ),
         ],
       ),
     );
+  }
+
+  Widget _statItem(String label, String value, IconData icon, Color color) {
+    return Column(
+      children: [
+        Icon(icon, color: color, size: 22),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: GoogleFonts.rubik(fontSize: 15, fontWeight: FontWeight.w600),
+        ),
+        Text(
+          label,
+          style: GoogleFonts.rubik(fontSize: 12, color: Colors.grey.shade600),
+        ),
+      ],
+    );
+  }
+
+  String _formatDateSafe(String? dateString) {
+    if (dateString == null || dateString.isEmpty) return "Not Available";
+
+    try {
+      final date = DateTime.parse(dateString);
+      return "${date.day}-${date.month}-${date.year} ${date.hour}:${date.minute}";
+    } catch (e) {
+      return "Invalid Date";
+    }
   }
 }
 

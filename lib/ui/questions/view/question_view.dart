@@ -158,9 +158,14 @@ class QuestionsView extends StatelessWidget {
                                 const SizedBox(height: 10),
                                 Row(
                                   children: [
-                                    Icon(Icons.edit, size: 20, color: Colors.grey[700]),
+                                    IconButton(
+                                      icon: Icon(Icons.edit, color: Colors.grey[700]),
+                                      onPressed: () {
+                                        controller.openEditSheet(q);
+                                      },
+                                    ),
                                     const SizedBox(width: 14),
-                                    Icon(Icons.delete, size: 20, color: Colors.red),
+                                    // Icon(Icons.delete, size: 20, color: Colors.red),
                                   ],
                                 ),
                               ],
@@ -177,6 +182,46 @@ class QuestionsView extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class EditQuestionSheet extends StatelessWidget {
+  final dynamic question;
+  EditQuestionSheet({required this.question});
+
+  final controller = Get.find<QuestionsController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: controller.questionText,
+            decoration: InputDecoration(labelText: "Question"),
+          ),
+          const SizedBox(height: 10),
+          TextField(
+            controller: controller.answerText,
+            decoration: InputDecoration(labelText: "Answer"),
+          ),
+          const SizedBox(height: 20),
+
+          ElevatedButton(
+            onPressed: () {
+              controller.updateQuestion(question.id);
+            },
+            child: const Text("Save Changes"),
+          ),
+        ],
       ),
     );
   }
